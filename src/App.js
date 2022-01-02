@@ -24,7 +24,7 @@ function App({publicKey, data, version,}) {
     const [receiverPublicKey, setReceiverPublicKey] = useState("")
 
 
-    const GraphEmailContractAddress = "0xEfd2745614a2C16981B365254f25EA1a68157e3F"
+    const GraphEmailContractAddress = "0xEEA1d4f3694B56Bb7E7F1e5999B91EA9f57F172B"
     const contractABI = abi.abi
 
     const getSenderPublicKeyFromContract = async () => {
@@ -57,11 +57,11 @@ function App({publicKey, data, version,}) {
     if(currentAccount){
         emailBox = <Stack direction={"row"} justifyContent={"space-evenly"} key={"emailBox"}>
             <Grid item >
-                <OutboxComponent ethereum={ethereum} currentAccount={currentAccount} />
+                <OutboxComponent graphEmailContract={graphEmailContract} ethereum={ethereum} currentAccount={currentAccount} />
             </Grid>
 
             <Grid item>
-                <InboxComponent ethereum={ethereum} currentAccount={currentAccount} senderPublicKey={senderPublicKey}/>
+                <InboxComponent graphEmailContract={graphEmailContract} ethereum={ethereum} currentAccount={currentAccount} senderPublicKey={senderPublicKey}/>
             </Grid>
         </Stack>
     }

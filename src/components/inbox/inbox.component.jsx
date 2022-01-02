@@ -3,7 +3,7 @@ import axios from "axios";
 import {Box, Button, Card, CardActions, CardContent, Stack, Typography} from "@mui/material";
 
 const InboxComponent = (props) => {
-    const {currentAccount, ethereum,senderPublicKey} = props
+    const {graphEmailContract, currentAccount, ethereum,senderPublicKey} = props
     const [decryptedMessages, updateDecryptedMessages] = useState([])
     const [receivedMessages, updateReceivedMessages] = useState([])
 
@@ -16,11 +16,18 @@ const InboxComponent = (props) => {
         return humanDateFormat
     }
 
-
-    const decryptMessage = async (item) => {
-
+    const getIpfsMessage = async (item) => {
         let response = await axios.get(item._ipfsLink)
         let encryptedMessage = response.data
+
+        updateDecryptedMessages({...decryptedMessages, [item.id]:encryptedMessage})
+
+
+    }
+
+    const decryptMessage = async (item) => {
+        let encryptedMessage = decryptedMessages[item.id]
+
 
         ethereum
           .request({
@@ -48,6 +55,7 @@ const InboxComponent = (props) => {
                 _toAddress
                 _ipfsLink
                 time
+                isEncrypted
               }
             
             }`.replace("__address__", currentAccount),
@@ -56,7 +64,7 @@ const InboxComponent = (props) => {
 
         var config = {
             method: 'post',
-            url: 'https://api.studio.thegraph.com/query/18117/graph-email/v0.4',
+            url: 'https://api.studio.thegraph.com/query/18117/graph-email-1/v0.1',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -75,7 +83,12 @@ const InboxComponent = (props) => {
     useEffect(() => {
         getReceivedMessages()
 
+
     }, [])
+
+    useEffect(() => {
+        receivedMessages.map(item => getIpfsMessage(item))
+    }, [receivedMessages])
 
     return (
         <Box paddingTop={"5rem"}>
@@ -95,7 +108,7 @@ const InboxComponent = (props) => {
                       </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button disabled={decryptedMessages[item.id] && true} onClick={e=>decryptMessage(item)} size="small">Decrypt and View</Button>
+                    <Button disabled={item.isEncrypted === "false"} onClick={e=>decryptMessage(item)} size="small">Decrypt and View</Button>
                   </CardActions>
                 </Card>)
             })

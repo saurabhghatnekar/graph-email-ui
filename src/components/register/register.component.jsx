@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, Typography} from "@material-ui/core";
-
+import {Stack} from "@mui/material";
 
 const RegisterComponent = (props) => {
     const {senderPublicKey, currentAccount, graphEmailContract, ethereum} = props;
@@ -33,9 +33,13 @@ const RegisterComponent = (props) => {
 
     }
     let registerButton = <></>
-
+    console.log("senderPublicKey in Reg comp", senderPublicKey)
     if(currentAccount && !senderPublicKey) {
-        registerButton = <Button variant={"contained"} onClick={getPublicKey}>Register</Button>
+
+        registerButton = <Stack direction={"column"} spacing={2} justifyContent={"center"}>
+                <Typography variant={"h5"}>To Send and Receive encrypted messages please register</Typography>
+                 <Button variant={"contained"} onClick={getPublicKey}>Register</Button>
+            </Stack>
 
     }else {
         registerButton = <></>
