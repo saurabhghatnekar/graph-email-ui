@@ -16,32 +16,30 @@ const InboxComponent = (props) => {
         return humanDateFormat
     }
 
-    const getIpfsMessage = async (item) => {
+
+    const decryptMessage = async (item) => {
         let response = await axios.get(item._ipfsLink)
         let encryptedMessage = response.data
 
-        updateDecryptedMessages({...decryptedMessages, [item.id]:encryptedMessage})
+        if(item.isEncrypted === "true") {
+            ethereum
+                .request({
+                    method: 'eth_decrypt',
+                    params: [encryptedMessage,
+                        currentAccount],
+                })
+                .then((decryptedMessage) => {
+                        console.log('The decrypted message is:', decryptedMessage)
+                        updateDecryptedMessages({...decryptedMessages, [item.id]: decryptedMessage})
 
+                    }
+                )
+                .catch((error) => console.log(error.message));
+        }
+        else {
 
-    }
-
-    const decryptMessage = async (item) => {
-        let encryptedMessage = decryptedMessages[item.id]
-
-
-        ethereum
-          .request({
-            method: 'eth_decrypt',
-            params: [encryptedMessage,
-                currentAccount],
-          })
-          .then((decryptedMessage) => {
-                  console.log('The decrypted message is:', decryptedMessage)
-              updateDecryptedMessages({...decryptedMessages, [item.id]:decryptedMessage})
-
-              }
-          )
-          .catch((error) => console.log(error.message));
+            updateDecryptedMessages({...decryptedMessages, [item.id]: encryptedMessage})
+        }
     }
 
     const getReceivedMessages = () => {
@@ -86,9 +84,9 @@ const InboxComponent = (props) => {
 
     }, [])
 
-    useEffect(() => {
-        receivedMessages.map(item => getIpfsMessage(item))
-    }, [receivedMessages])
+    // useEffect(() => {
+    //     receivedMessages.map(item => getIpfsMessage(item))
+    // }, [receivedMessages])
 
     return (
         <Box paddingTop={"5rem"}>
@@ -108,7 +106,7 @@ const InboxComponent = (props) => {
                       </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button disabled={item.isEncrypted === "false"} onClick={e=>decryptMessage(item)} size="small">Decrypt and View</Button>
+                    <Button disabled={decryptedMessages[item.id] && true} onClick={e=>decryptMessage(item)} size="small">Decrypt and View</Button>
                   </CardActions>
                 </Card>)
             })
