@@ -1,0 +1,54 @@
+import React, {useEffect, useState} from "react";
+import {Box, Button, Typography} from "@material-ui/core";
+
+
+const RegisterComponent = (props) => {
+    const {senderPublicKey, currentAccount, graphEmailContract, ethereum} = props;
+
+    const registerUser = async (encryptionPublicKey) => {
+        const response = await graphEmailContract.Register(encryptionPublicKey)
+
+        console.log("PublicKey response", response)
+    }
+
+    const getPublicKey = () => {
+        let encryptionPublicKey;
+        ethereum.request({
+        method: 'eth_getEncryptionPublicKey',
+        params: [currentAccount], // you must have access to the specified account
+        })
+            .then((result) => {
+        encryptionPublicKey = result;
+        console.log(encryptionPublicKey)
+               registerUser(encryptionPublicKey)
+        })
+            .catch((error) => {
+        if (error.code === 4001) {
+          // EIP-1193 userRejectedRequest error
+          console.log("We can't encrypt anything without the key.");
+        } else {
+          console.error(error);
+        }
+        });
+
+    }
+    let registerButton = <></>
+
+    if(currentAccount && !senderPublicKey) {
+        registerButton = <Button variant={"contained"} onClick={getPublicKey}>Register</Button>
+
+    }else {
+        registerButton = <></>
+    }
+
+    // useEffect(()=>{
+    // registerUser();
+    // }, [publicKey])
+    return (
+       <Box>
+            {registerButton}
+        </Box>
+    )
+}
+
+export default RegisterComponent;
