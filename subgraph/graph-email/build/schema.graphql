@@ -1,0 +1,15 @@
+type NewMessage @entity {
+  id: ID!
+  _fromAddress: Bytes! # address
+  _toAddress: Bytes! # address
+  _ipfsLink: String! # string
+  isEncrypted: String! # string
+  time: BigInt! # uint256
+}
+
+type newRegistration @entity {
+  id: ID!
+  _toAddress: Bytes! # address
+  _publicKey: String! # string
+  time: BigInt! # uint256
+}

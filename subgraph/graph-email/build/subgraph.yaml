@@ -1,0 +1,27 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: GraphBasedEmailSystem
+    network: rinkeby
+    source:
+      address: "0xeea1d4f3694b56bb7e7f1e5999b91ea9f57f172b"
+      abi: GraphBasedEmailSystem
+      startBlock: 9922900
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NewMessage
+        - newRegistration
+      abis:
+        - name: GraphBasedEmailSystem
+          file: GraphBasedEmailSystem/abis/GraphBasedEmailSystem.json
+      eventHandlers:
+        - event: NewMessage(indexed address,indexed address,string,string,uint256)
+          handler: handleNewMessage
+        - event: newRegistration(indexed address,string,uint256)
+          handler: handlenewRegistration
+      file: GraphBasedEmailSystem/GraphBasedEmailSystem.wasm
