@@ -13,74 +13,32 @@ import abi from "./utils/GraphBasedEmail.json"
 import {Stack} from "@mui/material";
 import OutboxComponent from "./components/outbox/outbox.component";
 import InboxComponent from "./components/inbox/inbox.component";
+import HomePage from "./pages/home/home.page";
+import {Route, Routes} from "react-router-dom";
+import InboxPage from "./pages/inbox/inbox.page";
+import OutboxPage from "./pages/outbox/outbox.page";
+import ContactsPage from "./pages/contacts/contacts.page";
 
-function App({publicKey, data, version,}) {
+export const basePath = "/graph-email-ui"
 
-    const { ethereum } = window;
+function App() {
 
-    const [currentAccount, setCurrentAccount] = useState("")
-    const [graphEmailContract, setGraphEmailContract] = useState();
-    const [senderPublicKey, setSenderPublicKey] = useState()
-    const [receiverPublicKey, setReceiverPublicKey] = useState("")
+    return (
+        <div>
+        <Routes>
+            <Route   path="/home" element={<HomePage/>}/>
+            <Route   path="/inbox" element={<InboxPage/>}/>
+            <Route   path="/outbox" element={<OutboxPage/>}/>
+            <Route   path="/contacts" element={<ContactsPage/>}/>
 
-
-    const GraphEmailContractAddress = "0xEEA1d4f3694B56Bb7E7F1e5999B91EA9f57F172B"
-    const contractABI = abi.abi
-
-    const getSenderPublicKeyFromContract = async () => {
-        graphEmailContract.GetSenderPublicKey()
-            .then(response => {
-                console.log(" sender publicKey response", response, response.length)
-                setSenderPublicKey(response)
-
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
+            {/*<Route exact path="/" element={<AddDevicePage/>}/>*/}
 
 
-    //connect to contract
-    useEffect(() => {
-        if (window.ethereum) {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
 
-            let GraphEmailContract = new ethers.Contract(GraphEmailContractAddress, contractABI, signer);
-            setGraphEmailContract(GraphEmailContract)
-            console.log("GraphEmailContract", GraphEmailContract);
-            getSenderPublicKeyFromContract()
-        }
-    }, [currentAccount])
+        </Routes>
+    </div>
+    )
 
-    let emailBox = <></>
-    if(currentAccount){
-        emailBox = <Stack direction={"row"} justifyContent={"space-evenly"} key={"emailBox"}>
-            <Grid item >
-                <OutboxComponent graphEmailContract={graphEmailContract} ethereum={ethereum} currentAccount={currentAccount} />
-            </Grid>
-
-            <Grid item>
-                <InboxComponent graphEmailContract={graphEmailContract} ethereum={ethereum} currentAccount={currentAccount} senderPublicKey={senderPublicKey}/>
-            </Grid>
-        </Stack>
-    }
-
-  return (
-    <Stack>
-        <Stack direction={"column"} alignItems={"center"} key={"connect"} spacing={2}>
-            <Typography padding={"2rem"} align={"center"} variant={"h2"}>
-              Welcome to Graph Based Email
-            </Typography>
-
-            <ConnectWalletComponent ethereum={ethereum} currentAccount={currentAccount} setCurrentAccount={setCurrentAccount}/>
-            <RegisterComponent senderPublicKey={senderPublicKey} currentAccount={currentAccount} graphEmailContract={graphEmailContract} ethereum={ethereum}/>
-
-        </Stack>
-
-        {emailBox}
-    </Stack>
-  );
 }
 
 export default App;

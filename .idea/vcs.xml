@@ -2,7 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/graph-based-email" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/graph-email" vcs="Git" />
   </component>
 </project>

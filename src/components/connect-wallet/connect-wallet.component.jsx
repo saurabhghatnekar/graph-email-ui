@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {Box, Button} from "@material-ui/core";
+import {Box, Button, Grid} from "@mui/material";
 import {Typography} from "@mui/material";
 import {Stack} from "@mui/material";
+import {connect, useSelector} from "react-redux";
+import {setCurrentAccount} from "../../redux/account/account.actions";
 
 const ConnectWalletComponent = (props) => {
-    const ethereum = props.ethereum;
-    const {currentAccount, setCurrentAccount} = props;
-    // const [currentAccount, setCurrentAccount] = useState("");
+    const ethereum = window.ethereum;
+    const {setCurrentAccount, buttonOnly} = props;
+
+    const currentAccount = useSelector(state => state.account.currentAccount)
 
     const checkIfWalletIsConnected = async () => {
     try {
@@ -42,7 +45,7 @@ const ConnectWalletComponent = (props) => {
     const accounts = await ethereum.request({ method: "eth_requestAccounts" });
     await ethereum.request({ method: 'wallet_switchEthereumChain', params:[{chainId: '0x4'}]});
     console.log("Connected", accounts[0]);
-
+        console.log("json", JSON.stringify(accounts[0]))
     setCurrentAccount(accounts[0]);
     } catch (error) {
     console.log(error)
@@ -50,13 +53,19 @@ const ConnectWalletComponent = (props) => {
     }
 
     let connectWalletButton = <></>
-    if(!currentAccount){
-
-        connectWalletButton =
-            <Stack direction={"column"} spacing={2} justifyContent={"center"}>
-                <Typography variant={"h5"}>Please connect your wallet to open your Email Box</Typography>
-                 <Button variant={"contained"} onClick={connectWallet}>Connect Wallet</Button>
-            </Stack>
+    console.log("connect Wallet",currentAccount, typeof currentAccount)
+    if(!currentAccount.includes("0x")){
+        if(buttonOnly){
+            connectWalletButton = <Button size="medium" bgcolor={"white"} variant={"contained"} onClick={connectWallet}>Connect Wallet</Button>
+        }
+        else {
+            connectWalletButton =
+                <Stack direction={"column"} spacing={2} justifyContent={"center"}>
+                    <Typography alignSelf={"center"} variant={"h5"}>Please connect your wallet to open your Email
+                        Box</Typography>
+                    <Button size="small" variant={"contained"} onClick={connectWallet}>Connect Wallet</Button>
+                </Stack>
+        }
     }
 
     useEffect(() => {
@@ -65,10 +74,18 @@ const ConnectWalletComponent = (props) => {
   }, [])
 
     return (
-        <Box>
+        <Grid container justifyContent={"center"}>
             {connectWalletButton}
-        </Box>
+        </Grid>
     )
 }
 
-export default ConnectWalletComponent
+const mapDispatchToProps = dispatch => ({
+    setCurrentAccount: account => dispatch(setCurrentAccount(account))
+})
+
+const mapStateToProps = state => ({
+    currentAccount: state.account.currentAccount
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(ConnectWalletComponent)
