@@ -1,15 +1,13 @@
 {
   "files": {
     "main.css": "/graph-email-ui/static/css/main.e6c13ad2.css",
-    "main.js": "/graph-email-ui/static/js/main.965a7a1c.js",
-    "static/js/787.41db3ea5.chunk.js": "/graph-email-ui/static/js/787.41db3ea5.chunk.js",
+    "main.js": "/graph-email-ui/static/js/main.71532f56.js",
     "index.html": "/graph-email-ui/index.html",
     "main.e6c13ad2.css.map": "/graph-email-ui/static/css/main.e6c13ad2.css.map",
-    "main.965a7a1c.js.map": "/graph-email-ui/static/js/main.965a7a1c.js.map",
-    "787.41db3ea5.chunk.js.map": "/graph-email-ui/static/js/787.41db3ea5.chunk.js.map"
+    "main.71532f56.js.map": "/graph-email-ui/static/js/main.71532f56.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.965a7a1c.js"
+    "static/js/main.71532f56.js"
   ]
 }
