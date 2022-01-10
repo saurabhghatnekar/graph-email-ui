@@ -103,11 +103,11 @@ export default function MiniDrawer(props) {
         localStorage.setItem("currentAccount", "")
         console.log(localStorage.getItem("currentAccount"))
         window.location.reload()
-        navigate(basePath+"/home")
+        navigate("/home")
     }
 
     const handleListItemClick = (event, index, text) => {
-        navigate(basePath+"/" + text.toLowerCase().split(" ").join("-"))
+        navigate("/" + text.toLowerCase().split(" ").join("-"))
     };
 
     const handleDrawerOpen = () => {

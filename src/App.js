@@ -26,12 +26,11 @@ function App() {
     return (
         <div>
         <Routes>
-            <Route   path={basePath+"/home"} element={<HomePage/>}/>
-            <Route   path={basePath+"/inbox"} element={<InboxPage/>}/>
-            <Route   path={basePath+"/outbox"} element={<OutboxPage/>}/>
-            <Route   path={basePath+"/contacts"} element={<ContactsPage/>}/>
-
-            {/*<Route exact path="/" element={<AddDevicePage/>}/>*/}
+            <Route   path="/home" element={<HomePage/>}/>
+            <Route   path="/inbox" element={<InboxPage/>}/>
+            <Route   path="/outbox" element={<OutboxPage/>}/>
+            <Route   path="/contacts" element={<ContactsPage/>}/>
+            <Route exact path="/" element={<HomePage/>}/>
 
 
 
