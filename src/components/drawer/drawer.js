@@ -24,6 +24,7 @@ import {useNavigate} from "react-router-dom";
 import ConnectWalletComponent from "../connect-wallet/connect-wallet.component";
 import {Home} from "@mui/icons-material";
 import {useSelector} from "react-redux";
+import {basePath} from "../../App";
 
 const drawerWidth = 240;
 
@@ -102,11 +103,11 @@ export default function MiniDrawer(props) {
         localStorage.setItem("currentAccount", "")
         console.log(localStorage.getItem("currentAccount"))
         window.location.reload()
-        navigate("/home")
+        navigate(basePath+"/home")
     }
 
     const handleListItemClick = (event, index, text) => {
-        navigate("/" + text.toLowerCase().split(" ").join("-"))
+        navigate(basePath+"/" + text.toLowerCase().split(" ").join("-"))
     };
 
     const handleDrawerOpen = () => {
