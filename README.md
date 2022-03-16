@@ -1,2 +1,2 @@
 Frontend for Graph Based Email App
-https://saurabhghatnekar.github.io/graph-email-ui
+https://demail-web3geek.netlify.app/
